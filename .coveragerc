@@ -1,0 +1,3 @@
+[run]
+source = rxit_utils
+omit = rxit_utils/test*
