@@ -4,3 +4,4 @@ pyramid_debugtoolbar
 pandas
 xlrd
 sqlalchemy
+webtest

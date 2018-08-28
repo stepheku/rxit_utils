@@ -11,9 +11,9 @@ def main(global_config, **settings):
 
     # General page routes
     config.add_route('home', '/')
-    config.add_route('about', '/about')
 
     # Utility routes
+    config.add_route('util_home', '/utilities')
     config.add_route('discern_orderable', '/utilities/discern_orderable')
     config.add_route('upload_discern_spreadsheet',
                      '/utilities/upload_spreadsheet')

@@ -9,9 +9,10 @@ def home_index(request):
     return {'project': 'pyramid_app'}
 
 
-@view_config(route_name='about', renderer="templates/home_about.pt")
-def home_about(request):
-    return { }
+@view_config(route_name='util_home',
+             renderer='templates/utilities/util_home.pt')
+def util_home(request):
+    return {}
 
 
 @view_config(route_name='discern_orderable',
@@ -42,23 +43,17 @@ def upload_spreadsheet(request):
     # stored somewhere.
     input_file = request.POST['spreadsheet'].file
 
-    # Using the filename like this without cleaning it is very
-    # insecure so please keep that in mind when writing your own
-    # file handling.
-    file_path = os.path.join('/tmp', filename)
-
-    # with open(file_path, 'wb') as output_file:
-    #     shutil.copyfileobj(input_file, output_file)
-
     tmp = NamedTemporaryFile(mode='w+b')#, delete=False)
     try:
         shutil.copyfileobj(input_file, tmp)
         extractor = DiscernOrderableExtractor(tmp.name)
         # extractor.create_df_csv('output.csv')
-        results_tbl_html = extractor.create_combined_df().to_html(
+        combined_df = extractor.create_combined_df()
+        results_tbl_html = combined_df.to_html(
             classes=['table', 'table-bordered'],
             table_id='dataTable',
         )
+        results_excel = combined_df.to_excel()
     finally:
         pass
     # return Response('OK')

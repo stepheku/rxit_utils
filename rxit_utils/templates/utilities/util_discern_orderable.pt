@@ -1,46 +1,44 @@
 <div metal:use-macro="load: ../../shared/layout.pt">
     <div metal:fill-slot="content">
 
-    <!--Extra CSS to override the dataframe css class-->
-    <!--?<style>-->
-       <!--?dataframe {-->
-           <!--?@include table;-->
-           <!--?@include table-bordered;-->
-       <!--?}-->
-    <!--?</style>-->
         <div class="content">
-          <!-- Breadcrumbs -->
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="report_utilties.html">
-                    Report utilities
-                </a>
-            </li>
-            <li class="breadcrumb-item active">
-                Discern expert orderable extractor
-            </li>
-          </ol>
-                      <!-- Page Content -->
-          <h1>Discern expert orderable extractor</h1>
-          <hr>
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/utilities">
+                        Report utilities
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Discern expert orderable extractor
+                </li>
+            </ol>
+            <!-- Page Content -->
+            <h1>Discern expert orderable extractor</h1>
+            <hr>
             <h2>Spreadsheet uploader</h2>
-            <form action="/utilities/upload_spreadsheet" method="post" accept-charset="utf-8"
+            <form action="/utilities/upload_spreadsheet" method="post"
+                  accept-charset="utf-8"
                   enctype="multipart/form-data">
-                <input class="btn-block" id="spreadsheet" name="spreadsheet" type="file" value="" />
+                <input class="btn-block" id="spreadsheet" name="spreadsheet"
+                       type="file" value=""/>
                 <br>
-                <input class="btn-primary" type="submit" value="Submit" />
+                <input class="btn-primary" type="submit" value="Submit"/>
             </form>
             <br>
-            <h2>How do I use this?</h2>
-            <p>
-                This utility extracts out pharmacy-based orderables from
-                a Discern Expert rules extract. This is helpful as the Discern
-                Development tool does not have a method to search for orderables
-                across all Discern Expert rules at a given client site
-            </p>
-            <p>
-                Using the CCL query:
-<pre>
+            <div tal:condition="python:request.method=='GET'">
+                <h2>How do I use this?</h2>
+                <p>
+                    This utility extracts out pharmacy-based orderables from
+                    a Discern Expert rules extract. This is helpful as the
+                    Discern
+                    Development tool does not have a method to search for
+                    orderables
+                    across all Discern Expert rules at a given client site
+                </p>
+                <p>
+                    Using the CCL query:
+                <pre>
 select ems.module_name
     , em.maint_validation
     , ems.version
@@ -68,26 +66,26 @@ order by ems.module_name
     , em.maint_validation
     , ems.data_type
 </pre>
-            take the output results, put them into an Excel file, and upload
-            the Excel file via the upload form. This utility will parse out
-            each pharmacy primary or synonym that exists between the different
-            Discern rules sections
-            </p>
-        </div>
-
-          <div class="card mb-3" tal:condition="exists:results">
-            <div class="card-header">
-              <i class="fas fa-table"></i>
-              Data Table Example</div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <!--?<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">-->
-                    ${structure: results}
-                <!--?</table>-->
-              </div>
+                take the output results, put them into an Excel file, and upload
+                the Excel file via the upload form. This utility will parse out
+                each pharmacy primary or synonym that exists between the
+                different
+                Discern rules sections
+                </p>
             </div>
-          </div>
-
+        </div>
+        <div class="card mb-3" tal:condition="exists:results">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Results
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                        ${structure: results}
+                </div>
+            </div>
         </div>
 
     </div>
+
+</div>
