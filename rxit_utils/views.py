@@ -47,13 +47,12 @@ def upload_spreadsheet(request):
     try:
         shutil.copyfileobj(input_file, tmp)
         extractor = DiscernOrderableExtractor(tmp.name)
-        # extractor.create_df_csv('output.csv')
+        extractor.create_combined_df_csv('output.csv')
         combined_df = extractor.create_combined_df()
         results_tbl_html = combined_df.to_html(
             classes=['table', 'table-bordered'],
             table_id='dataTable',
         )
-        results_excel = combined_df.to_excel()
     finally:
         pass
     # return Response('OK')
