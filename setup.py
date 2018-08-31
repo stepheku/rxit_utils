@@ -13,6 +13,10 @@ requires = [
 	'pyramid_chameleon',
     'pyramid_debugtoolbar',
     'waitress',
+    'pandas',
+    'xlrd',
+    'sqlalchemy',
+    'webtest'
     ]
 
 tests_require = [
