@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from pyramid.response import Response
+from pyramid.response import Response, FileResponse
 from rxit_utils.utilities.discern_orderable_extractor \
     import DiscernOrderableExtractor
 
@@ -26,34 +26,44 @@ def discern_orderable_uploader(request):
              request_method='POST',
              renderer='templates/utilities/util_discern_orderable.pt')
 def upload_spreadsheet(request):
-    import os
     import shutil
     from tempfile import NamedTemporaryFile
 
     # TODO: Add a button that downloads the dataframe as a CSV
-
-    # ``filename`` contains the name of the file in string format.
-    #
-    # warning: internet explorer is known to send an absolute file
-    # *path* as the filename.  This example is naive; it trusts
-    # user input.
-    filename = request.POST['spreadsheet'].filename
-
-    # ``input_file`` contains the actual file data which needs to be
-    # stored somewhere.
     input_file = request.POST['spreadsheet'].file
-
-    tmp = NamedTemporaryFile(mode='w+b')#, delete=False)
+    tmp = NamedTemporaryFile(mode='w+b')
+    tmp_output = NamedTemporaryFile(mode='w+b', delete=False)
     try:
         shutil.copyfileobj(input_file, tmp)
         extractor = DiscernOrderableExtractor(tmp.name)
-        extractor.create_combined_df_csv('output.csv')
         combined_df = extractor.create_combined_df()
+
         results_tbl_html = combined_df.to_html(
             classes=['table', 'table-bordered'],
             table_id='dataTable',
         )
+
+        # Create a tmp file to sit there in case user wants to download
+        combined_df.to_csv(tmp_output.name)
+
     finally:
         pass
-    # return Response('OK')
-    return {'results': results_tbl_html}
+
+    return {
+        'results': results_tbl_html,
+        'results_dl_path': tmp_output.name,
+    }
+
+
+@view_config(route_name='download',
+             request_method='POST',
+             renderer='templates/utilities/util_discern_orderable.pt')
+def download(request):
+    """
+    In the uploader, create the tmp_output, pass it over into the template
+    so if a user requests the download, this function can serve that path
+    """
+    download_path = request.POST['download_path']
+    response = FileResponse(download_path)
+    response.content_disposition = 'attachment; filename="output.csv"'
+    return response

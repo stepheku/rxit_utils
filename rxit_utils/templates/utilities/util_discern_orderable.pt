@@ -80,6 +80,18 @@ order by ems.module_name
                 Results
             </div>
             <div class="card-body">
+                <div tal:condition="python:request.method!='GET'">
+                    <form action="/utilities/download" method="post"
+                          accept-charset="utf-8"
+                          enctype="multipart/form-data">
+                        <input type="hidden" id="download_path"
+                               name="download_path"
+                               value=${results_dl_path}>
+                        <input class="btn-primary" type="submit"
+                               value="Download as CSV"/>
+                    </form>
+                </div>
+                <br>
                 <div class="table-responsive">
                         ${structure: results}
                 </div>

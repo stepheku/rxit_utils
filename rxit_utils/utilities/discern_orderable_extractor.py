@@ -1,11 +1,10 @@
-#TODO: Refactor the hell out of this
+# TODO: Refactor the hell out of this
 
 import collections
 import re
 import pandas as pd
 from xlrd.biffh import XLRDError
 from pandas.errors import ParserError
-
 
 prim_regex = r'primary mnemonic is (?:.*?MUL.ORD!d\d{5}|\d{6,}\.0) (.*?) \d{3,}'
 syn_regex = r'ordered as \d.*?\d{4,}\.0 (.*?) (?:2516|\d{4,})'
@@ -49,10 +48,8 @@ class DiscernOrderableExtractor:
             )
         self.discern_rule_sections = ['Evoke Section', 'Logic Section',
                                       'Action Section']
-        # TODO: Acting funny because of the tmp file
         # self.data_frame = read_spreadsheet(input_file)
 
-        # TODO: Hard-coding pd.read_excel just to see if this runs
         self.data_frame = pd.read_excel(input_file)
 
     # TODO: Raise exception over here

@@ -13,10 +13,14 @@ def main(global_config, **settings):
     config.add_route('home', '/')
 
     # Utility routes
-    config.add_route('util_home', '/utilities')
-    config.add_route('discern_orderable', '/utilities/discern_orderable')
+    config.add_route('util_home',
+                     '/utilities')
+    config.add_route('discern_orderable',
+                     '/utilities/discern_orderable')
     config.add_route('upload_discern_spreadsheet',
                      '/utilities/upload_spreadsheet')
+    config.add_route('download',
+                     '/utilities/download')
 
     config.scan()
     return config.make_wsgi_app()

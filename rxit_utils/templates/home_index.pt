@@ -65,7 +65,7 @@
                           Report utilities allow us to use python utilities to do
                           further analysis on data that we extract from the Cerner
                           system via CCL queries
-                        <a href="#" class="btn btn-primary">
+                        <a href="/utilities" class="btn btn-primary">
                             See more <i class="fas fa-angle-right"></i>
                         </a>
 
