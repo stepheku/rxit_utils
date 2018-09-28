@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from pyramid.response import Response, FileResponse
 from rxit_utils.utilities.discern_orderable_extractor \
     import DiscernOrderableExtractor
-
+from rxit_utils.utilities.pwrpln_color import color_updt_script
 
 @view_config(route_name='home', renderer="templates/home_index.pt")
 def home_index(request):
@@ -67,3 +67,25 @@ def download(request):
     response = FileResponse(download_path)
     response.content_disposition = 'attachment; filename="output.csv"'
     return response
+
+
+@view_config(route_name='pwrpln_color',
+             request_method='GET',
+             renderer='templates/utilities/util_pwrpln_color.pt')
+def pwrpln_color(request):
+    return {}
+
+
+@view_config(route_name='pwrpln_color_submit_form',
+             request_method='POST',
+             renderer='templates/utilities/util_pwrpln_color.pt')
+def pwrpln_color_submit(request):
+    pathway_comp_ids = request.POST['pathway_comp_ids']
+    color_value = request.POST['color_value']
+    return {'results': color_updt_script(color_value, pathway_comp_ids)}
+
+
+@view_config(route_name='ccl_home',
+             renderer='templates/ccl_repo/ccl_home.pt')
+def ccl_home(request):
+    return {}

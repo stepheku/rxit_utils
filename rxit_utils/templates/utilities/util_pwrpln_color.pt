@@ -1,0 +1,111 @@
+<div metal:use-macro="load: ../../shared/layout.pt">
+    <div metal:fill-slot="content">
+
+        <div class="content">
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/utilities">
+                        Report utilities
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Batch update powerplan colors
+                </li>
+            </ol>
+            <!-- Page Content -->
+            <h1>Batch update powerplan colors</h1>
+            <hr>
+            <h2>Pathway component ids to modify</h2>
+            <p>Copy and paste the pathway_component_id's from the working
+                spreadsheet in a single column</p>
+            <form method="post"
+                  action="/utilities/powerplan_colors_submit"
+                  accept-charset="utf-8"
+                  enctype="multipart/form-data"
+                  id="pathway_comp_form">
+
+                <input type="text" name="color_value" id="color_value"
+                       placeholder="Hex color value" maxlength="6" value="">
+                <br>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdown_button"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">Common note colors
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton"
+                         id="common_colors_dropdown">
+                        <a class="dropdown-item" href="#" id="section_label"
+                           onclick="updateColorCode('d2d2a6')">
+                            Section label
+                        </a>
+                        <a class="dropdown-item" href="#" id="provider_note"
+                           onclick="updateColorCode('91c8ff')">
+                            Provider note
+                        </a>
+                        <a class="dropdown-item" href="#" id="nursing_note"
+                           onclick="updateColorCode('80ffff')">
+                            Nursing note
+                        </a>
+                    </div>
+                </div>
+
+                <!--d2d2a6 - blue-green for section headers-->
+                <!--91c8ff - orange for provider notes-->
+                <!--80ffff - yellow for nursing notes-->
+
+
+                <script type="text/javascript">
+                    function updateColorCode(colorValue) {
+                        document.getElementById('color_value').value = colorValue;
+                    }
+                </script>
+                <br>
+                <textarea name="pathway_comp_ids"
+                          placeholder="Pathway_comp_id's to update, pasted from spreadsheet"
+                          cols="30"
+                          rows="10" form="pathway_comp_form"></textarea>
+
+                <br>
+                <input class="btn-primary" type="submit" value="Submit"/>
+            </form>
+            <br>
+            <div tal:condition="python:request.method=='GET'">
+                <h2>How do I use this?</h2>
+                <p>
+                    This takes a column of pathway_comp_id's (pasted in from
+                    an Excel spreadsheet) and a color value in hex (or selected
+                    from a drop-down) and returns a CCL update script that
+                    can be run directly or can be sent to someone with backend
+                    access to run directly
+                </p>
+                <p>
+                    Using the CCL query:
+                <pre>placeholder</pre>
+                Identify based on the notes what pathway_comp_id that does
+                not already have an assigned color, should be (e.g.,
+                section label, provider note or a nursing note). When
+                ready, copy and paste each list of pathway_comp_id's for
+                each color into the text box, select the appropriate color
+                and click Submit.
+                </p>
+            </div>
+        </div>
+        <div class="card mb-3" tal:condition="exists:results">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Resulting CCL update script
+            </div>
+            <div class="card-body">
+                <br>
+                <pre tal:condition="python:request.method!='GET'">
+                        ${structure: results}
+                </pre>
+            </div>
+        </div>
+
+    </div>
+
+</div>

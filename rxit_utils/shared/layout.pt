@@ -70,8 +70,8 @@
                 <a class="dropdown-item" href="/utilities/discern_orderable">
                     Discern expert <br>orderable extractor
                 </a>
-                <a class="dropdown-item">
-                    Test item
+                <a class="dropdown-item" href="/utilities/powerplan_colors">
+                    Powerplan batch <br>update colors
                 </a>
             </div>
         </li>
