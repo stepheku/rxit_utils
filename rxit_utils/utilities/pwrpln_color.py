@@ -31,16 +31,13 @@ def color_updt_script(color=None, pathway_comp_ids=None):
 
     pathway_comp_ids_padded = ''
 
-    # TODO: create a validation of inputs in the list
-    # something like try: str(float(x)) except: ValueError
-    # to create a separate list of valid entries to pass on to the update script
-    # probably as a separate function to call in this one
-    # probably also want to make sure that it will clear out blank entries
+    max_elem_per_list = 6
 
     for idx, id in enumerate(valid_pathway_comp_ids, 1):
         try:
             float(id)
-            if idx % 5 == 0 and idx != len(valid_pathway_comp_ids):
+            if idx % max_elem_per_list == 0 and idx != len(
+                    valid_pathway_comp_ids):
                 pathway_comp_ids_padded += id + ', \n'
             elif idx == len(valid_pathway_comp_ids):
                 pathway_comp_ids_padded += id

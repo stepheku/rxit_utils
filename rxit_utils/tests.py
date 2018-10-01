@@ -10,12 +10,6 @@ class ViewTests(unittest.TestCase):
     def tearDown(self):
         testing.tearDown()
 
-    def test_my_view(self):
-        from .views import home_index
-        request = testing.DummyRequest()
-        info = home_index(request)
-        self.assertEqual(info['project'], 'pyramid_app')
-
 
 class FunctionalTests(unittest.TestCase):
     def setUp(self):
@@ -31,3 +25,19 @@ class FunctionalTests(unittest.TestCase):
     def test_utils(self):
         res = self.testapp.get('/utilities', status=200)
         self.assertTrue(b'Report utilities' in res.body)
+
+    def test_utils_pwrpln_color(self):
+        res = self.testapp.get('/utilities/powerplan_colors', status=200)
+        self.assertTrue(b'pathway_component_id' in res.body)
+
+    def test_utils_pwrpln_color_test(self):
+        """Testing different inputs for updating powerplan colors
+        utility
+        1. """
+        res = self.testapp.post('/utilities/powerplan_colors_submit',
+                                {
+                                    'pathway_comp_ids': '1234\n2345\n3456',
+                                    'color_value': 'd2d2a6'
+                                })
+        self.assertTrue(b'00d2d2a6' in res.body)
+        self.assertTrue(b'BackColor&gt;00d2d2a6&lt;/BackColor' in res.body)
