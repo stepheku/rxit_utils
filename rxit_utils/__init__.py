@@ -31,6 +31,12 @@ def main(global_config, **settings):
     config.add_route('pwrpln_color_submit_form',
                      '/utilities/powerplan_colors_submit')
 
+    config.add_route('rtf_to_plaintext',
+                     '/utilities/rtf_to_plaintext')
+
+    config.add_route('upload_rtf_spreadsheet',
+                     '/utilities/upload_rtf_spreadsheet')
+
     # CCL repo routes
     config.add_route('ccl_home',
                      '/ccl_repo')

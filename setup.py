@@ -16,7 +16,7 @@ requires = [
     'pandas',
     'xlrd',
     'sqlalchemy',
-    'webtest'
+    'webtest',
     ]
 
 tests_require = [

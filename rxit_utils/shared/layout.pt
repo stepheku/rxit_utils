@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--?<!DOCTYPE html metal:define-macro="layout">-->
 <html lang="en">
 
 <head>
@@ -72,6 +71,9 @@
                 </a>
                 <a class="dropdown-item" href="/utilities/powerplan_colors">
                     Powerplan batch <br>update colors
+                </a>
+                <a class="dropdown-item" href="/utilities/rtf_to_plaintext">
+                    Spreadsheet RTF <br>to plaintext
                 </a>
             </div>
         </li>

@@ -1,0 +1,13 @@
+<html>
+<div metal:fill-slot="uploader">
+    <h2>Spreadsheet uploader</h2>
+<form action="/utilities/upload_spreadsheet" method="post"
+      accept-charset="utf-8"
+      enctype="multipart/form-data">
+    <input class="btn-block" id="spreadsheet" name="spreadsheet"
+           type="file" value=""/>
+    <br>
+    <input class="btn-primary" type="submit" value="Submit"/>
+</form>
+</div>
+</html>

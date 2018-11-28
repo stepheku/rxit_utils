@@ -1,0 +1,72 @@
+<div metal:use-macro="load: ../../shared/layout.pt">
+    <div metal:fill-slot="content">
+
+        <div class="content">
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/utilities">
+                        Report utilities
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    RTF to plaintext
+                </li>
+            </ol>
+            <!-- Page Content -->
+            <h1>Spreadsheet RTF to plaintext</h1>
+            <hr>
+
+            <!--TODO: Find a way to make this uploader into a separate
+            template and call-able here, since we may have multiple utilities
+            that require some sort of file upload-->
+            <h2>Spreadsheet uploader</h2>
+            <form action="/utilities/upload_rtf_spreadsheet" method="post"
+                  accept-charset="utf-8"
+                  enctype="multipart/form-data">
+                <input class="btn-block" id="spreadsheet" name="spreadsheet"
+                       type="file" value=""/>
+                <br>
+                <input class="btn-primary" type="submit" value="Submit"/>
+            </form>
+            <br>
+            <div tal:condition="python:request.method=='GET'">
+                <h2>How do I use this?</h2>
+                <p>
+                    This utility transforms an RTF-based column in a spreadsheet
+                    into a plaintext field. RTF columns typically include
+                    PharmNet order alerts and Powerplan reference text.
+                </p>
+                <p>
+                    It is assumed you already have a CCL script run, and the
+                    output has been moved into a spreadsheet. Just upload the
+                    spreadsheet
+                </p>
+            </div>
+        </div>
+        <div class="card mb-3" tal:condition="exists:results">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Results
+            </div>
+            <div class="card-body">
+                <div tal:condition="python:request.method!='GET'">
+                    <form action="/utilities/download" method="post"
+                          accept-charset="utf-8"
+                          enctype="multipart/form-data">
+                        <input type="hidden" id="download_path"
+                               name="download_path"
+                               value=${results_dl_path}>
+                        <input class="btn-primary" type="submit"
+                               value="Download as CSV"/>
+                    </form>
+                </div>
+                <br>
+                <div class="table-responsive">
+                        ${structure: results}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
