@@ -29,6 +29,18 @@
             </p>
 
 
+            <ol style="list-style:decimal">
+                <li><a class="dropdown-item" href="/utilities/discern_orderable">
+                    Discern expert orderable extractor
+                </a></li>
+                <li><a class="dropdown-item" href="/utilities/powerplan_colors">
+                    Powerplan batch update colors
+                </a></li>
+                <li><a class="dropdown-item" href="/utilities/rtf_to_plaintext">
+                    Spreadsheet RTF to plaintext
+                </a></li>
+            </ol>
+
         </div>
 
     </div>

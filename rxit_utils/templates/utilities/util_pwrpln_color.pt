@@ -83,7 +83,51 @@
                 </p>
                 <p>
                     Using the CCL query:
-                <pre>placeholder</pre>
+                <pre>
+select powerplan = pwcat.description
+    , powerplan_cmt = substring(1,100,lt2.long_text)
+    , phase = pwcat2.description
+    , note = evaluate2(if(pwcat.type_mean = "PATHWAY") substring(1,255,lt.long_text)
+        elseif(pwcat.type_mean = "CAREPLAN") substring(1,255,lt3.long_text)
+        endif)
+    , pathway_comp_id = evaluate2(if(pwcat.type_mean = "PATHWAY") pc.pathway_comp_id
+        elseif(pwcat.type_mean = "CAREPLAN") pc2.pathway_comp_id
+        endif)
+    , display_format_xml = evaluate2(if(pwcat.type_mean = "PATHWAY") pc.display_format_xml
+        elseif(pwcat.type_mean = "CAREPLAN") pc2.display_format_xml
+        endif)
+from pathway_catalog pwcat
+    , pathway_catalog pwcat2
+    , pw_cat_reltn pcr
+    , pathway_comp pc
+    , pathway_comp pc2
+    , long_text lt
+    , long_text lt2
+    , long_text lt3
+plan pwcat where pwcat.active_ind = 1
+    and pwcat.type_mean in ("PATHWAY", "CAREPLAN")
+    and (pwcat.description like 'ONC*'
+        or pwcat.description like 'INF*')
+    and pwcat.end_effective_dt_tm > cnvtdatetime(curdate,curtime3)
+    and pwcat.ref_owner_person_id = 0
+join lt2 where lt2.long_text_id = outerjoin(pwcat.long_text_id)
+    and lt2.active_ind = outerjoin(1)
+join pcr where pcr.pw_cat_s_id = outerjoin(pwcat.pathway_catalog_id)
+join pwcat2 where pwcat2.pathway_catalog_id = outerjoin(pcr.pw_cat_t_id)
+    and pwcat2.sub_phase_ind = outerjoin(0)
+    and pwcat2.active_ind = outerjoin(1)
+join pc where pc.pathway_catalog_id = outerjoin(pwcat2.pathway_catalog_id)
+    and pc.active_ind = outerjoin(1)
+    and pc.parent_entity_name = outerjoin("LONG_TEXT")
+join lt where lt.long_text_id = outerjoin(pc.parent_entity_id)
+join pc2 where pc2.pathway_catalog_id = outerjoin(pwcat.pathway_catalog_id)
+    and pc2.active_ind = outerjoin(1)
+    and pc2.parent_entity_name = outerjoin("LONG_TEXT")
+join lt3 where lt3.long_text_id = outerjoin(pc2.parent_entity_id)
+order by pwcat.description_key
+    , pwcat2.description_key
+    , pc.sequence
+            </pre>
                 Identify based on the notes what pathway_comp_id that does
                 not already have an assigned color, should be (e.g.,
                 section label, provider note or a nursing note). When

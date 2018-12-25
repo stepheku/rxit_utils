@@ -1,10 +1,22 @@
+"""
+unrtf.py
+
+This module is used for pandas dataframes that have columns with
+rtf formatting and where we need to convert it to the text value
+"""
+
+
 import pandas as pd
 import subprocess
 
 
 def find_rtf_col(df: pd.DataFrame) -> list:
     """Returns a list of dataframe columns whose values contain the string rtf1,
-     implying that the values are in an RTF format"""
+     implying that the values are in an RTF format
+
+    :param df: pandas dataframe that has at least 1 column with rtf formatting
+    :return: list of dataframe columns with rtf formatting
+    """
     col_list = []
     for col in df.columns:
         try:

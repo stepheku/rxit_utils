@@ -34,7 +34,6 @@ def upload_spreadsheet(request):
     import shutil
     from tempfile import NamedTemporaryFile
 
-    # TODO: Add a button that downloads the dataframe as a CSV
     input_file = request.POST['spreadsheet'].file
     tmp = NamedTemporaryFile(mode='w+b')
     tmp_output = NamedTemporaryFile(mode='w+b', delete=False)
@@ -100,13 +99,10 @@ def rtf_to_plaintext(request):
              request_method='POST',
              renderer='templates/utilities/util_rtf.pt')
 def upload_rtf_spreadsheet(request):
-    import shutil
-    import textract
     from tempfile import NamedTemporaryFile
 
     # TODO: Add a button that downloads the dataframe as a CSV
     input_file = request.POST['spreadsheet'].file
-    tmp = NamedTemporaryFile(mode='w+b')
     tmp_output = NamedTemporaryFile(mode='w+b', delete=False)
 
     try:
