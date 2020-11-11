@@ -1,11 +1,9 @@
-import os
 from setuptools import setup, find_packages
+from pathlib import Path
 
-
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'README.md')) as f:
+with open(Path(".", 'README.md')) as f:
     README = f.read()
-with open(os.path.join(here, 'CHANGES.txt')) as f:
+with open(Path(".", 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 # TODO: Add the custom commands to install the unrtf system dependency
@@ -14,16 +12,8 @@ CUSTOM_COMMANDS = [
     ['apt-get', '--assume-yes', 'install', 'unrtf'],
 ]
 
-requires = [
-    'pyramid',
-    'pyramid_chameleon',
-    'pyramid_debugtoolbar',
-    'waitress',
-    'pandas',
-    'xlrd',
-    'sqlalchemy',
-    'webtest',
-    ]
+with open(Path(".", "requirements.txt"), "r") as f:
+    requires = f.read().splitlines()
 
 tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
