@@ -5,9 +5,8 @@ from rxit_utils.utilities.discern_orderable_extractor \
 from rxit_utils.utilities.pwrpln_color import color_updt_script
 from rxit_utils.utilities.unrtf import unrtf_dataframe
 import pandas as pd
-
-
-# from rxit_utils.utilities.rtf_to_txt import striprtf
+from . import plan_dcw_generator
+from pathlib import Path
 
 @view_config(route_name='home', renderer="templates/home_index.pt")
 def home_index(request):
@@ -19,6 +18,61 @@ def home_index(request):
 def util_home(request):
     return {}
 
+
+@view_config(route_name='onc_powerplan_dcw_generator',
+             renderer='templates/utilities/util_dcw_generator.pt')
+def util_dcw_generator(request):
+    return {}
+
+
+@view_config(route_name='upload_onc_powerplan_dcw_spreadsheet',
+             request_method='POST',
+             renderer='templates/utilities/util_dcw_generator.pt')
+def upload_dcw_spreadsheet(request):
+    import shutil
+    import zipfile
+    from tempfile import NamedTemporaryFile
+    import tempfile
+
+    tmp_path = Path(
+        ".", "rxit_utils", "plan_dcw_generator", "data")
+
+    # tmp_path = tempfile.TemporaryDirectory(dir=)
+    
+    # tmp_path = Path(tmp_path.name)
+
+    input_file_name = request.POST['spreadsheet'].filename
+    input_file = request.POST['spreadsheet'].file
+
+    if Path(input_file_name).suffix.lower() == ".xlsx":
+        tmp_xl = NamedTemporaryFile(mode='w+b', delete=False, dir=tmp_path)
+        tmp = NamedTemporaryFile(mode='w+b', delete=False, dir=tmp_path)
+        shutil.copyfileobj(input_file, tmp_xl)
+        df = pd.read_excel(tmp_xl.name)
+        df.to_csv(tmp.name)
+
+    elif Path(input_file_name).suffix.lower() == ".csv":
+        tmp = NamedTemporaryFile(mode='w+b', delete=False, dir=tmp_path)
+        # tmp = Path(tmp_subpath, tmp_name).link_to(Path(tmp.name))
+        shutil.copyfileobj(input_file, tmp)
+
+    output_file_name = "powerplan_dcws.zip"
+    output_file = Path(tmp_path, output_file_name)
+    try:
+        plan_dcw_generator.plan_dcw_generator.main(input_file=tmp.name)
+        with zipfile.ZipFile(Path(tmp_path, "powerplan_dcws.zip"), mode="w") as f:
+            for dcw in tmp_path.glob("*.xlsx"):
+                f.write(filename=dcw, arcname=dcw.name)
+        
+        for dcw in tmp_path.glob("*.xlsx"):
+            dcw.unlink()
+
+        response = FileResponse(output_file, request=request, cache_max_age=86400)
+        response.content_disposition = 'attachment; filename="{}"'.format(output_file_name)
+    finally:
+        pass
+
+    return response
 
 @view_config(route_name='discern_orderable',
              request_method='GET',
@@ -122,9 +176,3 @@ def upload_rtf_spreadsheet(request):
         'results': results_tbl_html,
         'results_dl_path': tmp_output.name,
     }
-
-
-@view_config(route_name='ccl_home',
-             renderer='templates/ccl_repo/ccl_home.pt')
-def ccl_home(request):
-    return {}

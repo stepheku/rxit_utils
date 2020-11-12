@@ -1,0 +1,75 @@
+<div metal:use-macro="load: ../../shared/layout.pt">
+    <div metal:fill-slot="content">
+
+        <div class="content">
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/utilities">
+                        Report utilities
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Oncology PowerPlan DCW Generator
+                </li>
+            </ol>
+            <!-- Page Content -->
+            <h1>Oncology PowerPlan DCW Generator</h1>
+            <hr>
+            <h2>Spreadsheet uploader</h2>
+            <form action="/utilities/upload_onc_powerplan_dcw_spreadsheet" method="post"
+                  accept-charset="utf-8"
+                  enctype="multipart/form-data">
+                <input class="btn-block" id="spreadsheet" name="spreadsheet"
+                       type="file" value=""/>
+                <br>
+                <input class="btn-primary" type="submit" value="Submit"/>
+            </form>
+            <br>
+            <div tal:condition="python:request.method=='GET'">
+                <h2>How do I use this?</h2>
+                <p>
+                    This report has (hopefully) already been built and compiled in your domain
+                    <ol style="list-style:number">
+                    <li>Sign into Discern Visual Developer</li>
+                    <li>Hit <b>Ctrl+R</b> (or go to <b>Build</b> and <b>Run Prompt Program</b>) to bring up the Run Prompt Program window</li>
+                    <li>Put in the program name <b>bc_onc_powerplan_extract_json</b> and click <b>Run</b></li>
+                    <li>In the <b>PowerPlan search parameter</b>, make sure your parameters are uppercase, and asterisks are wildcards 
+                    (for example, ONCP* will look for any PowerPlan that starts with ONCP, ONCP LY* will look for any PowerPlan that starts with ONCP LY). 
+                    Please try to be specific in your search. The program can return a fair amount of PowerPlans, but returning all PowerPlans might crash 
+                    the program</li>
+                    <li>Wait for the program to finish running</li>
+                    <li>Copy the results into an Excel spreadsheet and save it as an XLSX or CSV file</li>
+                    <li>At the top of this page there's a spreadsheet uploader, upload the spreadsheet that you just saved</li>
+                    <li>The download for the DCWs should start momentarily</li>
+                    </ol>
+                </p>
+            </div>
+        </div>
+        <div class="card mb-3" tal:condition="exists:results">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Results
+            </div>
+            <div class="card-body">
+                <div tal:condition="python:request.method!='GET'">
+                    <form action="/utilities/download" method="post"
+                          accept-charset="utf-8"
+                          enctype="multipart/form-data">
+                        <input type="hidden" id="download_path"
+                               name="download_path"
+                               value=${results_dl_path}>
+                        <input class="btn-primary" type="submit"
+                               value="Download as CSV"/>
+                    </form>
+                </div>
+                <br>
+                <div class="table-responsive">
+                        ${structure: results}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

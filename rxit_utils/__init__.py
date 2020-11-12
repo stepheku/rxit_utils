@@ -37,9 +37,11 @@ def main(global_config, **settings):
     config.add_route('upload_rtf_spreadsheet',
                      '/utilities/upload_rtf_spreadsheet')
 
-    # CCL repo routes
-    config.add_route('ccl_home',
-                     '/ccl_repo')
+    config.add_route('onc_powerplan_dcw_generator',
+                     '/utilities/onc_powerplan_dcw_generator')
+
+    config.add_route('upload_onc_powerplan_dcw_spreadsheet',
+                     '/utilities/upload_onc_powerplan_dcw_spreadsheet')
 
     config.scan()
     return config.make_wsgi_app()

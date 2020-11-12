@@ -30,6 +30,9 @@
 
 
             <ol style="list-style:decimal">
+                <li><a class="dropdown-item" href="/utilities/onc_powerplan_dcw_generator">
+                    Oncology PowerPlan DCW Generator
+                </a></li>
                 <li><a class="dropdown-item" href="/utilities/discern_orderable">
                     Discern expert orderable extractor
                 </a></li>

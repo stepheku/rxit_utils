@@ -5,3 +5,4 @@ pandas
 xlrd
 sqlalchemy
 webtest
+openpyxl
