@@ -1,10 +1,12 @@
 from pyramid.config import Configurator
-
+from rxit_utils.data.db_session import DbSession
+from pathlib import Path
 
 def main(global_config, **settings):
     """This function returns a Pyramid WSGI application."""
     config = Configurator(settings=settings)
     init_includes(config)
+    init_db(config)
     init_routing(config)
     return config.make_wsgi_app()
 
@@ -50,3 +52,8 @@ def init_routing(config):
                      '/utilities/upload_onc_powerplan_dcw_spreadsheet')
 
     config.scan()
+
+def init_db(config):
+    db_folder = Path(__file__).parent.absolute()
+    db_file = str(Path(db_folder, "db", "rxit_utils.sqlite").absolute())
+    DbSession.global_init(db_file=db_file)
