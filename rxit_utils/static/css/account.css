@@ -1,0 +1,14 @@
+form.account-form {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    background-color: white;
+    color: #222;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.error-msg {
+    color:red;
+}

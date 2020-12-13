@@ -6,3 +6,4 @@ xlrd
 sqlalchemy
 webtest
 openpyxl
+passlib

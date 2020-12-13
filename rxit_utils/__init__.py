@@ -48,8 +48,10 @@ def init_routing(config):
     )
 
 
-    config.add_route('upload_onc_powerplan_dcw_spreadsheet',
-                     '/utilities/upload_onc_powerplan_dcw_spreadsheet')
+    config.add_route('account_home', '/account')
+    config.add_route('login', '/account/login')
+    config.add_route('register', '/account/register')
+    config.add_route('logout', '/account/logout')
 
     config.scan()
 

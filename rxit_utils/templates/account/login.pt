@@ -1,0 +1,22 @@
+<div metal:use-macro="load: ../../shared/layout.pt">
+    <div metal:fill-slot="content">
+
+        <div class="content">
+            <div>
+                <form action="" method="POST" class="account-form">
+                    <h1>Login</h1>
+                    <input name="username" type="text" placeholder=" User name" class="form-control" value="${username}">
+                    <input name="password" type="password" placeholder=" Password" class="form-control" value=${password}>
+                    <button type="submit" class="btn-success">Login</button>
+                    <div class="error-msg" tal:condition="error">${error}</div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div metal:fill-slot="additional-css">
+        <link href="${request.static_url('rxit_utils:static/css/account.css')}" rel="stylesheet">
+    </div>
+
+</div>

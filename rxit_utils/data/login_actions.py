@@ -11,7 +11,7 @@ class LoginAction(SqlAlchemyBase):
     action = sa.Column(sa.String)
 
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
-    user = orm.relation("User", back_populates="login_action")
+    # user = orm.relation("User", back_populates="users")
 
     def __repr__(self):
-        return "<User {}>".format(user_name)
+        return "<LoginAction {}>".format(action)

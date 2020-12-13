@@ -27,6 +27,7 @@
     <!-- Custom styles for this template-->
     <link href="../static/css/sb-admin.css" rel="stylesheet">
 
+    <div metal:define-slot="additional-css"></div>
 </head>
 
 <body id="page-top">
@@ -52,12 +53,32 @@
                 <span>Home</span>
             </a>
         </li>
-        <!--?<li class="nav-item">-->
-            <!--?<a class="nav-link" href="#">-->
-                <!--?<i class="fas fa-fw fa-database"></i>-->
-                <!--?<span>CCL Repo</span>-->
-            <!--?</a>-->
-        <!--?</li>-->
+
+        <li class="nav-item active" tal:condition="not user_id">
+            <a class="nav-link" href="/account/login">
+                <i class="fas fa-fw fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+        </li>
+        <li class="nav-item active" tal:condition="not user_id">
+            <a class="nav-link" href="/account/register">
+                <i class="fas fa-fw fa-sign-in-alt"></i>
+                <span>Register</span>
+            </a>
+        </li>
+        <li class="nav-item active" tal:condition="user_id">
+            <a class="nav-link" href="/account">
+                <i class="fas fa-fw fa-sign-in-alt"></i>
+                <span>Account</span>
+            </a>
+        </li>
+        <li class="nav-item active" tal:condition="user_id">
+            <a class="nav-link" href="/account/logout">
+                <i class="fas fa-fw fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/utilities" id="pagesDropdown"
                role="button" data-toggle="dropdown" aria-haspopup="true"
