@@ -51,7 +51,7 @@ def login_post(request):
 
     cookie_auth.set_auth(request=request, user_id=user.id)
 
-    return httpexceptions.HTTPFound("/account")
+    return httpexceptions.HTTPFound("/")
 
 
 # ################### REGISTRATION ############################
@@ -94,7 +94,7 @@ def register_post(request: Request):
     # view_model.user_id has not yet been set
     cookie_auth.set_auth(request=request, user_id=user.id)
 
-    return httpexceptions.HTTPFound("/account")
+    return httpexceptions.HTTPFound("/")
 
 
 # ################### LOGOUT ############################
