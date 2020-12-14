@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI rxit_utils server instance
+After=syslog.target
+
+[Service]
+ExecStart=/home/app/apps/venv/bin/uwsgi -H /home/app/apps/venv --ini-paste /home/app/apps/rxit_utils/production.ini
+RuntimeDirectory=/home/app/apps/rxit_utils/
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
