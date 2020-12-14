@@ -38,6 +38,12 @@ def find_user_by_id(user_id: int) -> typing.Optional[User]:
     return user
 
 
+def find_user_by_username(username: str) -> typing.Optional[User]:
+    session = DbSession.factory()
+    user = session.query(User).filter(User.username == username).first()
+    return user
+
+
 def hash_text(text: str) -> str:
     hashed_text = pbkdf2_sha256.hash(text)
     return hashed_text
