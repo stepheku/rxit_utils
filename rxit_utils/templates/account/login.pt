@@ -5,8 +5,8 @@
             <div>
                 <form action="" method="POST" class="account-form">
                     <h1>Login</h1>
-                    <input name="username" type="text" placeholder=" User name" class="form-control" value="${username}">
-                    <input name="password" type="password" placeholder=" Password" class="form-control" value=${password}>
+                    <input name="username" type="text" placeholder=" user name" class="form-control" value="${username}" required>
+                    <input name="password" type="password" placeholder=" password" class="form-control" value=${password} required>
                     <button type="submit" class="btn-success">Login</button>
                     <div class="error-msg" tal:condition="error">${error}</div>
                 </form>
