@@ -13,7 +13,9 @@ class RegisterViewModel(ViewModelBase):
     def validate(self):
         if not self.username:
             self.error = "You must specify a username"
-        if not self.email:
+        elif not self.email:
             self.error = "You must specify an e-mail address"
-        if not self.password:
+        elif not self.password:
             self.error = "You must specify a password"
+        elif user_service.find_user_by_username(username=self.username):
+            self.error = "Username already exists"
