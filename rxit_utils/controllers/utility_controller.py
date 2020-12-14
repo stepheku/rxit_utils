@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from pyramid import httpexceptions
 from pyramid.response import Response, FileResponse
 from rxit_utils.utilities.discern_orderable_extractor \
     import DiscernOrderableExtractor
@@ -7,17 +8,24 @@ from rxit_utils.utilities.unrtf import unrtf_dataframe
 import pandas as pd
 from rxit_utils import plan_dcw_generator
 from pathlib import Path
+from rxit_utils.view_models.shared.view_model_base import ViewModelBase
 
 @view_config(route_name='util_home',
              renderer='rxit_utils:templates/utilities/util_home.pt')
 def util_home(request):
-    return {}
+    view_model = ViewModelBase(request)
+    if not view_model.user_id:
+        return httpexceptions.HTTPFound("/account/login")
+    return view_model.to_dict()
 
 
 @view_config(route_name='onc_powerplan_dcw_generator',
              renderer='rxit_utils:templates/utilities/util_dcw_generator.pt')
 def util_dcw_generator(request):
-    return {}
+    view_model = ViewModelBase(request)
+    if not view_model.user_id:
+        return httpexceptions.HTTPFound("/account/login")
+    return view_model.to_dict()
 
 
 @view_config(route_name='upload_onc_powerplan_dcw_spreadsheet',
@@ -71,7 +79,10 @@ def upload_dcw_spreadsheet(request):
              request_method='GET',
              renderer='rxit_utils:templates/utilities/util_discern_orderable.pt')
 def discern_orderable_uploader(request):
-    return {}
+    view_model = ViewModelBase(request)
+    if not view_model.user_id:
+        return httpexceptions.HTTPFound("/account/login")
+    return view_model.to_dict()
 
 
 @view_config(route_name='upload_discern_spreadsheet',
@@ -124,7 +135,10 @@ def download(request):
              request_method='GET',
              renderer='rxit_utils:templates/utilities/util_pwrpln_color.pt')
 def pwrpln_color(request):
-    return {}
+    view_model = ViewModelBase(request)
+    if not view_model.user_id:
+        return httpexceptions.HTTPFound("/account/login")
+    return view_model.to_dict()
 
 
 @view_config(route_name='pwrpln_color_submit_form',
@@ -139,7 +153,10 @@ def pwrpln_color_submit(request):
 @view_config(route_name='rtf_to_plaintext',
              renderer='rxit_utils:templates/utilities/util_rtf.pt')
 def rtf_to_plaintext(request):
-    return {}
+    view_model = ViewModelBase(request)
+    if not view_model.user_id:
+        return httpexceptions.HTTPFound("/account/login")
+    return view_model.to_dict()
 
 
 @view_config(route_name='upload_rtf_spreadsheet',
