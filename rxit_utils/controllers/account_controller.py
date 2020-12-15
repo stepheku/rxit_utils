@@ -40,14 +40,16 @@ def login_get(request):
     request_method="POST",
 )
 def login_post(request):
+    view_model = LoginViewModel(request)
     username = request.POST.get("username")
     password = request.POST.get("password")
 
     user = user_service.login_user(username, password)
 
     if not user:
-        error = "User not found or password incorrect"
-        return {"username": username, "password": password, "error": error}
+        view_model.error = "User not found or password incorrect"
+        return view_model.to_dict()
+        # return {"username": username, "password": password, "error": error}
 
     cookie_auth.set_auth(request=request, user_id=user.id)
 
