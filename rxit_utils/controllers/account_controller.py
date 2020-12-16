@@ -92,9 +92,9 @@ def register_post(request: Request):
         view_model.error = "Registration failed"
         return view_model.to_dict()
 
-    # user_id needs user.id and not from the view_model because
-    # view_model.user_id has not yet been set
-    cookie_auth.set_auth(request=request, user_id=user.id)
+    user_query = user_service.find_user_by_username(view_model.username)
+
+    cookie_auth.set_auth(request=request, user_id=user_query.id)
 
     return httpexceptions.HTTPFound("/")
 
