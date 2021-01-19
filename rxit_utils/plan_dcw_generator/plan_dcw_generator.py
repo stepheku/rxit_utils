@@ -44,6 +44,11 @@ def replace_illegal_windows_chars(input_str: str) -> str:
         "\\": replace_char,
         "/": replace_char,
         "|": replace_char,
+        ":": replace_char,
+        "<": replace_char,
+        ">": replace_char,
+        "\"": replace_char,
+        "?": replace_char,
     }
     return general_utils.replace_str_by_dict(input_str=input_str, substitutions=lookup_dict)
 
