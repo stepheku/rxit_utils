@@ -194,6 +194,7 @@ def create_powerplan_dict(input_file: str) -> dict:
             treatment_sched = re.findall(
                 TREATMENT_PERIOD_REGEX, row.get("TREATMENT_SCHED")
             )
+            phase_class = row.get("PHASE_CLASS")
 
             if phase_pathway_catalog_id not in powerplan["phases"]:
                 powerplan["phases"][phase_pathway_catalog_id] = {
@@ -216,6 +217,7 @@ def create_powerplan_dict(input_file: str) -> dict:
                     "phase_offset_unit": phase_offset_unit,
                     "anchor_phase": anchor_phase,
                     "treatment_sched": treatment_sched,
+                    "classification": phase_class,
                     "components": {},
                 }
 

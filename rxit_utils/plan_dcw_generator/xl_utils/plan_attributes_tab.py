@@ -269,7 +269,7 @@ def add_phase_properties(
             "Treatment Schedule": "Yes" if phase_dict.get("treatment_sched") else "No",
             "Route for Review": phase_dict.get("route_for_review"),
             # TODO: Add fields here to the query,
-            "Classification": "Oncology",
+            "Classification": phase_dict.get("classification"),
             "Document Reschedule Reason": phase_dict.get(""),
             "Build Linked Components Group": phase_dict.get(""),
         }
