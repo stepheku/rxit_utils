@@ -178,10 +178,10 @@ def create_powerplan_dict(input_file: str) -> dict:
             future_visit_outpt = row.get("FUTURE_VISIT_OUTPT")
             future_visit_inpt = row.get("FUTURE_VISIT_INPT")
             check_alerts_on_planning_ind = string_int_to_bool(
-                row.get("CHECK_ALERTS_ON_PLANNING_IND")
+                row.get("PHASE_CHECK_ALERTS_ON_PLANNING_IND")
             )
             check_alerts_on_plan_updt_ind = string_int_to_bool(
-                row.get("CHECK_ALERTS_ON_PLAN_UPDT_IND")
+                row.get("PHASE_CHECK_ALERTS_ON_PLAN_UPDT_IND")
             )
             route_for_review = route_for_review_int_to_str(
                 int(row.get("PHASE_ROUTE_FOR_REVIEW"))
