@@ -66,7 +66,7 @@ def login_post(request):
 )
 def register_get(request):
     view_model = RegisterViewModel(request)
-    return view_model.to_dict()
+    return httpexceptions.HTTPFound("/")
 
 
 @view_config(

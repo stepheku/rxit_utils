@@ -39,8 +39,9 @@
                     Please try to be specific in your search. The program can return a fair amount of PowerPlans, but returning all PowerPlans might crash 
                     the program</li>
                     <li>Wait for the program to finish running</li>
-                    <li>Copy the results into an Excel spreadsheet and save it as an XLSX or CSV file</li>
+		    <li>Copy the results into an Excel spreadsheet and save it as a CSV file (select the type <b>CSV UTF-8 (Comma delimited) (*.csv)</b></li>
                     <li>At the top of this page there's a spreadsheet uploader, upload the spreadsheet that you just saved</li>
+		    <li>And click the Submit button</li>
                     <li>The download for the DCWs should start momentarily</li>
                     </ol>
                 </p>

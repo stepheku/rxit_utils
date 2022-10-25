@@ -36,9 +36,12 @@ def upload_dcw_spreadsheet(request):
     import zipfile
     from tempfile import NamedTemporaryFile
     import tempfile
+    from datetime import datetime
+    print(str(datetime.now()))
 
     tmp_path = Path(
         ".", "rxit_utils", "plan_dcw_generator", "data")
+    tmp_path = Path("/tmp")
 
     # tmp_path = tempfile.TemporaryDirectory(dir=)
     
@@ -46,16 +49,19 @@ def upload_dcw_spreadsheet(request):
 
     input_file_name = request.POST['spreadsheet'].filename
     input_file = request.POST['spreadsheet'].file
+    tmp = NamedTemporaryFile(mode='wb', delete=False, dir=tmp_path)
+    with open(tmp.name, 'wb') as f:
+        shutil.copyfileobj(input_file, f)
 
     if Path(input_file_name).suffix.lower() == ".xlsx":
-        tmp = NamedTemporaryFile(mode='w+b', delete=False, dir=tmp_path)
-        df = pd.read_excel(input_file)
+        #tmp = NamedTemporaryFile(mode='w', delete=False, dir=tmp_path)
+        df = pd.read_excel(input_file, engine="openpyxl")
         df.to_csv(tmp.name)
 
     elif Path(input_file_name).suffix.lower() == ".csv":
-        tmp = NamedTemporaryFile(mode='w+b', delete=False, dir=tmp_path)
-        # tmp = Path(tmp_subpath, tmp_name).link_to(Path(tmp.name))
-        shutil.copyfileobj(input_file, tmp)
+        #tmp = NamedTemporaryFile(mode='w', delete=False, dir=tmp_path)
+        df = pd.read_csv(tmp.name, encoding="ISO-8859-1")
+        df.to_csv(tmp.name)
 
     output_file_name = "powerplan_dcws.zip"
     output_file = Path(tmp_path, output_file_name)

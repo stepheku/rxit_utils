@@ -70,9 +70,24 @@ def format_note_cells(
             ),
             "component_type": "Note Pink",
         },
+        (255, 0, 0): {
+            "pattern_fill": PatternFill(
+                patternType="solid",
+                fgColor=Color(type="rgb", rgb="FFFF0000"),
+                bgColor=Color(type="indexed", indexed=64),
+            ),
+            "component_type": "Note Red",
+        },
+        None: {
+            "pattern_fill": PatternFill(fill_type=None),
+            "component_type": "Note with unknown color",
+        }
+
     }
 
     comp_rgb = (bgcolor_red, bgcolor_green, bgcolor_blue)
+    if comp_rgb not in component_type_bg_fill:
+        comp_rgb = None
     comp_type = component_type_bg_fill.get(comp_rgb).get("component_type")
     comp_fill = component_type_bg_fill.get(comp_rgb).get("pattern_fill")
 
@@ -168,23 +183,24 @@ def add_row_2(
                 else:
                     active_cell.value = v
                 active_cell.alignment = Alignment(wrap_text=True)
-    for os_id, os in sorted(
-        order_sentences.items(), key=dict_loop.get_order_sentence_seq
-    ):
-        if os_id != 0:
-            sentence_column = cell_column.get("order_sentence_display_line")
-            iv_component_column = cell_column.get("iv_ingredient")
-            order_comment_column = cell_column.get("order_comment")
-            active_cell = worksheet.cell(row=comp_row, column=sentence_column)
-            active_cell.value = os.get("order_sentence_display_line")
-            active_cell.alignment = Alignment(wrap_text=True)
-            active_cell = worksheet.cell(row=comp_row, column=order_comment_column)
-            active_cell.value = os.get("order_comment")
-            active_cell.alignment = Alignment(wrap_text=True)
-            if os.get("iv_ingredient"):
-                active_cell = worksheet.cell(row=comp_row, column=iv_component_column)
-                active_cell.value = os.get("iv_ingredient")
-            comp_row += 1
+    if order_sentences is not None:
+        for os_id, os in sorted(
+            order_sentences.items(), key=dict_loop.get_order_sentence_seq
+        ):
+            if os_id != 0:
+                sentence_column = cell_column.get("order_sentence_display_line")
+                iv_component_column = cell_column.get("iv_ingredient")
+                order_comment_column = cell_column.get("order_comment")
+                active_cell = worksheet.cell(row=comp_row, column=sentence_column)
+                active_cell.value = os.get("order_sentence_display_line")
+                active_cell.alignment = Alignment(wrap_text=True)
+                active_cell = worksheet.cell(row=comp_row, column=order_comment_column)
+                active_cell.value = os.get("order_comment")
+                active_cell.alignment = Alignment(wrap_text=True)
+                if os.get("iv_ingredient"):
+                    active_cell = worksheet.cell(row=comp_row, column=iv_component_column)
+                    active_cell.value = os.get("iv_ingredient")
+                comp_row += 1
 
     return worksheet
 
@@ -197,6 +213,7 @@ def add_multiple_rows(
     components to the worksheet
     """
     for _, v in sorted(comp_dict.items(), key=dict_loop.get_comp_seq):
+        # try:
         worksheet = add_row_2(
             worksheet=worksheet,
             # comp_row=next_row,
@@ -225,7 +242,8 @@ def add_multiple_rows(
             linking_override_reason=v.get("linking_override_reason"),
             order_sentences=v.get("order_sentences"),
         )
-
+        # except Exception as e:
+        #     print("Issue with component {} ({}): {}".format(v.get("component"), type(e), e.args))
     return worksheet
 
 

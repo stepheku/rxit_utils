@@ -54,7 +54,7 @@ def add_text_to_toc_tab(
 
     worksheet.cell(row=2, column=2).value = powerplan_name
     worksheet.cell(row=3, column=2).value = powerplan_description
-    worksheet.cell(row=4, column=2).value = "Stephen Kung"
+    worksheet.cell(row=4, column=2).value = " "
     worksheet.cell(row=8, column=2).value = link
 
     return workbook

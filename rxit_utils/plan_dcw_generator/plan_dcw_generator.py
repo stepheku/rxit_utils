@@ -58,8 +58,7 @@ def main(input_file: str):
 
     for _, plan_dict in powerplan_dict.items():
         plan_name = plan_dict.get("display_description")
-        plan_file_name = plan_name.replace("ONCP ", "")
-        plan_file_name = replace_illegal_windows_chars(plan_file_name)
+        plan_file_name = replace_illegal_windows_chars(plan_name)
 
         wb = openpyxl.Workbook()
         output_file = Path(
@@ -111,9 +110,12 @@ def main(input_file: str):
             )
 
             # Add items to Components tab
+            # try:
             ws = components_tab_rows.add_multiple_rows(
                 comp_dict=comp_dict, worksheet=ws
             )
+            # except:
+            #     print("Issue with Plan: {}, Phase: {}".format(plan_name, phase_name))
 
             # Add items to Plan Attributes tab while iterating over phases
             ws_plan_attr = plan_attributes_tab.add_phase_row(

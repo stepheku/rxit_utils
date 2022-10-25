@@ -11,6 +11,7 @@ import typing
 import csv
 import json
 import re
+import json.decoder
 from .xl_utils import general_utils as general_utils
 
 STRING_ENCODING = "ISO-8859-1"
@@ -40,7 +41,13 @@ def double_escape_control_chars(input_str: str) -> str:
 
 
 def string_int_to_bool(input_str: str) -> bool:
-    string_bool_map = {"0": False, "1": True}
+    if input_str is None:
+        return False
+    string_bool_map = {"0": False, "1": True, 0: False, 1: True}
+    if input_str == "0.0":
+        input_str = 0
+    elif input_str == "1.0":
+        input_str = 1
     return string_bool_map[input_str]
 
 
@@ -128,7 +135,7 @@ def create_powerplan_dict(input_file: str) -> dict:
                 row.get("FIRST_PHASE_PATHWAY_CATALOG_ID")
             )
             route_for_review = route_for_review_int_to_str(
-                int(row.get("ROUTE_FOR_REVIEW"))
+                int(float(row.get("ROUTE_FOR_REVIEW")))
             )
             if pathway_catalog_id not in powerplan_dict:
                 powerplan_dict[pathway_catalog_id] = {
@@ -167,7 +174,7 @@ def create_powerplan_dict(input_file: str) -> dict:
 
             powerplan = powerplan_dict[pathway_catalog_id]
 
-            phase_sequence = int(row.get("PHASE_SEQUENCE"))
+            phase_sequence = int(float(row.get("PHASE_SEQUENCE")))
             phase_pathway_catalog_id = float(row.get("PHASE_PATHWAY_CATALOG_ID"))
             description = row.get("PHASE_DESCRIPTION")
             primary_phase_ind = string_int_to_bool(row.get("PRIMARY_PHASE_IND"))
@@ -184,17 +191,18 @@ def create_powerplan_dict(input_file: str) -> dict:
                 row.get("PHASE_CHECK_ALERTS_ON_PLAN_UPDT_IND")
             )
             route_for_review = route_for_review_int_to_str(
-                int(row.get("PHASE_ROUTE_FOR_REVIEW"))
+                int(float(row.get("PHASE_ROUTE_FOR_REVIEW")))
             )    
-            duration_qty = int(row.get("DURATION_QTY"))
+            duration_qty = int(float(row.get("DURATION_QTY")))
             duration_unit = row.get("DURATION_UNIT")
-            phase_offset_qty = int(row.get("PHASE_OFFSET_QTY"))
+            phase_offset_qty = int(float(row.get("PHASE_OFFSET_QTY")))
             phase_offset_unit = row.get("PHASE_OFFSET_UNIT")
             anchor_phase = row.get("ANCHOR_PHASE")
             treatment_sched = re.findall(
                 TREATMENT_PERIOD_REGEX, row.get("TREATMENT_SCHED")
             )
             phase_class = row.get("PHASE_CLASS")
+            document_resch_reason = row.get("DOCUMENT_RESCH_REASON")
 
             if phase_pathway_catalog_id not in powerplan["phases"]:
                 powerplan["phases"][phase_pathway_catalog_id] = {
@@ -218,13 +226,14 @@ def create_powerplan_dict(input_file: str) -> dict:
                     "anchor_phase": anchor_phase,
                     "treatment_sched": treatment_sched,
                     "classification": phase_class,
+                    "document_resch_reason": document_resch_reason,
                     "components": {},
                 }
 
             phase = powerplan["phases"][phase_pathway_catalog_id]
 
             pathway_comp_id = float(row.get("PATHWAY_COMP_ID"))
-            comp_sequence = int(row.get("COMP_SEQUENCE"))
+            comp_sequence = int(float(row.get("COMP_SEQUENCE")))
             component_type = row.get("COMPONENT_TYPE")
 
             component = (
@@ -239,9 +248,9 @@ def create_powerplan_dict(input_file: str) -> dict:
             time_zero_ind = string_int_to_bool(row.get("TIME_ZERO_IND"))
             time_zero_offset = row.get("TIME_ZERO_OFFSET")
             offset = row.get("OFFSET")
-            bgcolor_red = int(row.get("BGCOLOR_RED"))
-            bgcolor_blue = int(row.get("BGCOLOR_BLUE"))
-            bgcolor_green = int(row.get("BGCOLOR_GREEN"))
+            bgcolor_red = int(float(row.get("BGCOLOR_RED")))
+            bgcolor_blue = int(float(row.get("BGCOLOR_BLUE")))
+            bgcolor_green = int(float(row.get("BGCOLOR_GREEN")))
             target_duration = row.get("TARGET_DURATION")
             dcp_clin_cat = row.get("DCP_CLIN_CAT")
             dcp_clin_sub_cat = row.get("DCP_CLIN_SUB_CAT")
@@ -286,7 +295,7 @@ def create_powerplan_dict(input_file: str) -> dict:
                     "linking_anchor_comp_ind": linking_anchor_comp_ind,
                     "linking_group_desc": linking_group_desc,
                     "linking_rule": linking_rule,
-                    "linking_rule_quantity": int(linking_rule_quantity),
+                    "linking_rule_quantity": int(float(linking_rule_quantity)),
                     "linking_override_reason": linking_override_reason,
                     "treatment_sched": comp_treatment_sched,
                     "scheduled_phase": scheduled_phase,
@@ -299,14 +308,28 @@ def create_powerplan_dict(input_file: str) -> dict:
                 empty_str_check(row.get("ORDER_SENTENCE_SEQUENCE"))
             )
             order_sentence_id = float(empty_str_check(row.get("ORDER_SENTENCE_ID", 0)))
-            order_sentence_display_line = row.get("ORDER_SENTENCE_DISPLAY_LINE")
+            # order_sentence_display_line = row.get("ORDER_SENTENCE_DISPLAY_LINE")
+            if row.get("ORDER_SENTENCE_DISPLAY_LINE"):
+                try:
+                    order_sentence_display_line = (
+                        json.loads(row.get("ORDER_SENTENCE_DISPLAY_LINE")).get("DJSON").get("ST")
+                    )
+                except json.decoder.JSONDecodeError:
+                    if '{"DJSON":{"ST":"' in row.get("ORDER_SENTENCE_DISPLAY_LINE"):
+                        order_sentence_display_line = row.get("ORDER_SENTENCE_DISPLAY_LINE").replace('{"DJSON":{"ST":"', '')
+            else:
+                order_sentence_display_line = ""
             iv_ingredient = row.get("IV_INGREDIENT")
             iv_comp_syn_id = float(empty_str_check(row.get("IV_COMP_SYN_ID")))
 
             if row.get("ORDER_COMMENT"):
-                order_comment = (
-                    json.loads(row.get("ORDER_COMMENT")).get("DJSON").get("ST")
-                )
+                try:
+                    order_comment = (
+                        json.loads(row.get("ORDER_COMMENT")).get("DJSON").get("ST")
+                    )
+                except json.decoder.JSONDecodeError:
+                    if '{"DJSON":{"ST":"' in row.get("ORDER_COMMENT"):
+                        order_comment = row.get("ORDER_COMMENT").replace('{"DJSON":{"ST":"', '')
             else:
                 order_comment = ""
 
@@ -317,9 +340,12 @@ def create_powerplan_dict(input_file: str) -> dict:
                 
                 pre_order_sentence_detail = double_escape_control_chars(pre_order_sentence_detail)
 
-                order_sentence_detail = json.loads(
-                    pre_order_sentence_detail
-                )
+                try:
+                    order_sentence_detail = json.loads(
+                        pre_order_sentence_detail
+                    )
+                except:
+                    print(pre_order_sentence_detail)
             else:
                 order_sentence_detail = ""
 

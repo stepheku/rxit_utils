@@ -164,7 +164,7 @@ def add_parent_plan_properties_rows(
             "Copy Forward": util.bool_to_str(plan_dict.get("copy_forward_ind")),
             "Phase Offsets": plan_dict.get(""),
             "Lab Phase": plan_dict.get(""),
-            "Offset": "{} {}".format(phase_offset_dict.get("phase_offset_qty"), phase_offset_dict.get("phase_offset_unit")),
+            "Offset": "{} {}".format(phase_offset_dict.get("phase_offset_qty", ""), phase_offset_dict.get("phase_offset_unit", "")),
             "Anchor": phase_offset_dict.get("anchor_phase"),
             "Plan Ordering Defaults": plan_dict.get(""),
         }
@@ -270,7 +270,7 @@ def add_phase_properties(
             "Route for Review": phase_dict.get("route_for_review"),
             # TODO: Add fields here to the query,
             "Classification": phase_dict.get("classification"),
-            "Document Reschedule Reason": phase_dict.get(""),
+            "Document Reschedule Reason": phase_dict.get("document_resch_reason"),
             "Build Linked Components Group": phase_dict.get(""),
         }
     )

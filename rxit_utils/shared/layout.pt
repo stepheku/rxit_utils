@@ -60,7 +60,7 @@
                 <span>Login</span>
             </a>
         </li>
-        <li class="nav-item active" tal:condition="not user_id">
+        <li class="nav-item active" tal:condition="user_id">
             <a class="nav-link" href="/account/register">
                 <i class="fas fa-fw fa-sign-in-alt"></i>
                 <span>Register</span>
